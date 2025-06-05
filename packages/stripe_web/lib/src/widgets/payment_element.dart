@@ -114,7 +114,7 @@ class PaymentElementState extends State<PaymentElement> {
           if (stripeElements.length != 0) {
             mutationObserver?.disconnect();
             final element = stripeElements.item(0) as web.HTMLElement;
-            resizeObserver.observe(element);
+            // resizeObserver.observe(element);
           }
         }.toJS);
         mutationObserver!.observe(
@@ -201,7 +201,7 @@ class PaymentElementState extends State<PaymentElement> {
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: double.infinity,
-          maxHeight: height,
+          maxHeight: 400,
         ),
         child: const HtmlElementView(viewType: 'stripe_payment_element'),
       ),
