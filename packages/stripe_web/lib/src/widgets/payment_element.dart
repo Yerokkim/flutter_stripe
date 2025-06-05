@@ -141,66 +141,28 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   void initState() {
-    super.initState();
-
-    height = widget.height ?? 400;
+    height = widget.height ?? height;
 
     _divElement = web.HTMLDivElement()
       ..id = 'payment-element'
       ..style.border = 'none'
       ..style.width = '100%'
-      ..style.height = '${height}px'
-      ..style.overflow = 'hidden';
+      ..style.height = '$height'
+      ..style.overflow = 'scroll'
+      ..style.overflowX = 'hidden';
 
+    elements = WebStripe.js.elements(createOptions());
+    mutationObserver!.observe(
+      web.document,
+      web.MutationObserverInit(childList: true, subtree: true),
+    );
     ui.platformViewRegistry.registerViewFactory(
       'stripe_payment_element',
       (int viewId) => _divElement,
     );
 
-    web.MutationObserver observer = web.MutationObserver(((entries, obs) {
-      final el = web.document.getElementById('payment-element');
-      if (el != null) {
-        obs.disconnect();
-
-        elements = WebStripe.js.elements(createOptions());
-        element = elements!.createPayment(elementOptions())
-          ..mount('#payment-element'.toJS)
-          ..onChange(onCardChanged)
-          ..onFocus(requestFocus)
-          ..onBlur(requestBlur);
-      }
-    }).toJS);
-
-    observer.observe(
-      web.document,
-      web.MutationObserverInit(childList: true, subtree: true),
-    );
+    super.initState();
   }
-
-  // @override
-  // void initState() {
-  //   height = widget.height ?? height;
-
-  //   _divElement = web.HTMLDivElement()
-  //     ..id = 'payment-element'
-  //     ..style.border = 'none'
-  //     ..style.width = '100%'
-  //     ..style.height = '$height'
-  //     ..style.overflow = 'scroll'
-  //     ..style.overflowX = 'hidden';
-
-  //   elements = WebStripe.js.elements(createOptions());
-  //   mutationObserver!.observe(
-  //     web.document,
-  //     web.MutationObserverInit(childList: true, subtree: true),
-  //   );
-  //   ui.platformViewRegistry.registerViewFactory(
-  //     'stripe_payment_element',
-  //     (int viewId) => _divElement,
-  //   );
-
-  //   super.initState();
-  // }
 
   js.PaymentElement? get element => WebStripe.element as js.PaymentElement?;
 
