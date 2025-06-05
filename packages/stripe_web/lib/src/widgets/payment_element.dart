@@ -141,6 +141,12 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   void initState() {
+    super.initState();
+    final body = web.document.body!;
+    body.style.position = 'fixed';
+    body.style.width = '100vw';
+    body.style.height = '100vh';
+    body.style.overflow = 'hidden';
     height = widget.height ?? height;
 
     _divElement = web.HTMLDivElement()
@@ -160,8 +166,6 @@ class PaymentElementState extends State<PaymentElement> {
       'stripe_payment_element',
       (int viewId) => _divElement,
     );
-
-    super.initState();
   }
 
   js.PaymentElement? get element => WebStripe.element as js.PaymentElement?;
