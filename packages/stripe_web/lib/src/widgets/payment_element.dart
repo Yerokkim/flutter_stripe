@@ -209,22 +209,7 @@ class PaymentElementState extends State<PaymentElement> {
   }
 
   js.JsElementsCreateOptions createOptions() {
-    // ✅ appearance 정의
-    final appearance = widget.appearance ??
-        js.ElementAppearance.fromJson({
-          'variables': {
-            'colorPrimary': '#000000',
-            'fontFamily': 'inherit',
-          },
-          'rules': {
-            '.Input': {
-              'autocomplete': 'off',
-              'inputmode': 'text',
-              'padding': '12px',
-              'fontSize': '16px',
-            },
-          },
-        });
+    final appearance = widget.appearance ?? js.ElementAppearance();
 
     if (widget.clientSecret?.isNotEmpty == true) {
       return js.JsElementsCreateOptions(
@@ -248,32 +233,6 @@ class PaymentElementState extends State<PaymentElement> {
       locale: widget.locale,
     );
   }
-
-  // js.JsElementsCreateOptions createOptions() {
-  //   final appearance = widget.appearance ?? js.ElementAppearance();
-
-  //   if (widget.clientSecret?.isNotEmpty == true) {
-  //     return js.JsElementsCreateOptions(
-  //       clientSecret: widget.clientSecret,
-  //       customerSessionClientSecret: widget.customerSessionClientSecret,
-  //       appearance: appearance.toJson().jsify() as js.JsElementAppearance,
-  //       locale: widget.locale,
-  //     );
-  //   }
-
-  //   return js.JsElementsCreateOptions(
-  //     amount: widget.amount,
-  //     currency: widget.currency,
-  //     mode: widget.mode,
-  //     paymentMethodTypes: widget.paymentMethodTypes
-  //         ?.map((pmt) => pmt.toJS)
-  //         .toList(growable: false)
-  //         .toJS,
-  //     paymentMethodCreation: widget.paymentMethodCreation,
-  //     appearance: appearance.toJson().jsify() as js.JsElementAppearance,
-  //     locale: widget.locale,
-  //   );
-  // }
 
   js.PaymentElementOptions elementOptions() {
     return js.PaymentElementOptions(
