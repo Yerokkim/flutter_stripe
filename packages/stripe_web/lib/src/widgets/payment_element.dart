@@ -140,31 +140,58 @@ class PaymentElementState extends State<PaymentElement> {
       }
     }).toJS,
   );
-
-  @override
-  void initState() {
+  void _registerAndMountStripeIframe() {
     if (_alreadyRegistered) return;
 
-    height = widget.height ?? height;
-
-    _divElement = web.HTMLDivElement()
-      ..id = 'payment-element'
-      ..style.border = 'none'
-      ..style.width = '100%'
-      ..style.height = '$height'
-      ..style.overflow = 'scroll'
-      ..style.overflowX = 'hidden';
-
-    elements = WebStripe.js.elements(createOptions());
-    mutationObserver!.observe(
-      web.document,
-      web.MutationObserverInit(childList: true, subtree: true),
-    );
     ui.platformViewRegistry.registerViewFactory(
       'stripe_payment_element',
       (int viewId) => _divElement,
     );
     _alreadyRegistered = true;
+
+    _divElement = web.HTMLDivElement()
+      ..id = 'payment-element'
+      ..style.border = 'none'
+      ..style.width = '100%'
+      ..style.height = '${widget.height ?? height}'
+      ..style.overflow = 'scroll'
+      ..style.overflowX = 'hidden';
+
+    elements = WebStripe.js.elements(createOptions());
+    element = elements!.createPayment(elementOptions())
+      ..mount('#payment-element'.toJS)
+      ..onBlur(requestBlur)
+      ..onFocus(requestFocus)
+      ..onChange(onCardChanged);
+  }
+
+  @override
+  void initState() {
+    if (_alreadyRegistered) return;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _registerAndMountStripeIframe();
+    });
+
+    // height = widget.height ?? height;
+
+    // _divElement = web.HTMLDivElement()
+    //   ..id = 'payment-element'
+    //   ..style.border = 'none'
+    //   ..style.width = '100%'
+    //   ..style.height = '$height'
+    //   ..style.overflow = 'scroll'
+    //   ..style.overflowX = 'hidden';
+
+    // elements = WebStripe.js.elements(createOptions());
+    // mutationObserver!.observe(
+    //   web.document,
+    //   web.MutationObserverInit(childList: true, subtree: true),
+    // );
+    // ui.platformViewRegistry.registerViewFactory(
+    //   'stripe_payment_element',
+    //   (int viewId) => _divElement,
+    // );
+    // _alreadyRegistered = true;
     super.initState();
   }
 
@@ -207,9 +234,10 @@ class PaymentElementState extends State<PaymentElement> {
           maxWidth: double.infinity,
           maxHeight: height,
         ),
-        child: const HtmlElementView(
-            key: ValueKey('stripe_payment'),
-            viewType: 'stripe_payment_element'),
+        child: StripeIframeView(),
+        //  const HtmlElementView(
+        //     key: ValueKey('stripe_payment'),
+        //     viewType: 'stripe_payment_element'),
       ),
     );
   }
@@ -269,5 +297,14 @@ class PaymentElementState extends State<PaymentElement> {
     element?.unmount();
 
     super.dispose();
+  }
+}
+
+class StripeIframeView extends StatelessWidget {
+  const StripeIframeView({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const HtmlElementView(viewType: 'stripe_payment_element');
   }
 }
