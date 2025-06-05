@@ -147,7 +147,7 @@ class PaymentElementState extends State<PaymentElement> {
       ..id = 'payment-element'
       ..style.border = 'none'
       ..style.width = '100%'
-      ..style.height = '400'
+      ..style.height = '400px'
       ..style.overflow = 'scroll'
       ..style.overflowX = 'hidden';
 
@@ -195,15 +195,13 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   Widget build(BuildContext context) {
-    return Focus(
-      autofocus: true,
-      focusNode: _effectiveNode,
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: double.infinity,
-          maxHeight: 400,
-        ),
-        child: const HtmlElementView(viewType: 'stripe_payment_element'),
+    return MediaQuery.removeViewInsets(
+      context: context,
+      removeBottom: true,
+      child: SizedBox(
+        width: double.infinity,
+        height: 400,
+        child: HtmlElementView(viewType: 'stripe_payment_element'),
       ),
     );
   }
