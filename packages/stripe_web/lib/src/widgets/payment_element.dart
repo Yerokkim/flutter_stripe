@@ -130,10 +130,10 @@ class PaymentElementState extends State<PaymentElement> {
       if (widget.height == null) {
         for (final entry in entries.toDart) {
           final cr = entry.contentRect;
-          setState(() {
-            height = cr.height.toDouble();
-            _divElement.style.height = '${height}px';
-          });
+          // setState(() {
+          //   height = cr.height.toDouble();
+          //   _divElement.style.height = '${height}px';
+          // });
         }
       }
     }).toJS,
@@ -141,13 +141,13 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   void initState() {
-    height = widget.height ?? height;
+    // height = widget.height ?? height;
 
     _divElement = web.HTMLDivElement()
       ..id = 'payment-element'
       ..style.border = 'none'
       ..style.width = '100%'
-      ..style.height = '$height'
+      ..style.height = '400'
       ..style.overflow = 'scroll'
       ..style.overflowX = 'hidden';
 
