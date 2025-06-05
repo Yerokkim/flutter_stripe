@@ -141,12 +141,18 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   void initState() {
+    final body = web.document.body;
+    final htmlEl = web.document.documentElement;
+
+    body?.style.overflow = 'hidden';
+    // htmlEl?.style.overflow = 'hidden';
+    body?.style.height = '100vh';
+    // htmlEl?.style.height = '100vh';
     height = widget.height ?? height;
 
     _divElement = web.HTMLDivElement()
       ..id = 'payment-element'
       ..style.border = 'none'
-      ..style.position = 'fixed'
       ..style.width = '100%'
       ..style.height = '$height'
       ..style.overflow = 'scroll'
