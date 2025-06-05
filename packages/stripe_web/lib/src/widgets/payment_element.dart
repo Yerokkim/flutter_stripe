@@ -114,7 +114,7 @@ class PaymentElementState extends State<PaymentElement> {
           if (stripeElements.length != 0) {
             mutationObserver?.disconnect();
             final element = stripeElements.item(0) as web.HTMLElement;
-            // resizeObserver.observe(element);
+            resizeObserver.observe(element);
           }
         }.toJS);
         mutationObserver!.observe(
@@ -125,19 +125,19 @@ class PaymentElementState extends State<PaymentElement> {
     }.toJS),
   );
 
-  // late final resizeObserver = web.ResizeObserver(
-  //   ((JSArray<web.ResizeObserverEntry> entries, web.ResizeObserver observer) {
-  //     if (widget.height == null) {
-  //       for (final entry in entries.toDart) {
-  //         final cr = entry.contentRect;
-  //         setState(() {
-  //           height = cr.height.toDouble();
-  //           _divElement.style.height = '${height}px';
-  //         });
-  //       }
-  //     }
-  //   }).toJS,
-  // );
+  late final resizeObserver = web.ResizeObserver(
+    ((JSArray<web.ResizeObserverEntry> entries, web.ResizeObserver observer) {
+      if (widget.height == null) {
+        for (final entry in entries.toDart) {
+          final cr = entry.contentRect;
+          setState(() {
+            height = cr.height.toDouble();
+            _divElement.style.height = '${height}px';
+          });
+        }
+      }
+    }).toJS,
+  );
 
   @override
   void initState() {
@@ -259,7 +259,7 @@ class PaymentElementState extends State<PaymentElement> {
   @override
   void dispose() {
     mutationObserver?.disconnect();
-    // resizeObserver.disconnect();
+    resizeObserver.disconnect();
     element?.unmount();
 
     super.dispose();
