@@ -141,7 +141,13 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   void initState() {
-    // height = widget.height ?? height;
+    super.initState();
+
+    final body = web.document.body!;
+    body.style.position = 'fixed';
+    body.style.width = '100vw';
+    body.style.height = '100vh';
+    body.style.overflow = 'hidden';
 
     _divElement = web.HTMLDivElement()
       ..id = 'payment-element'
@@ -152,17 +158,42 @@ class PaymentElementState extends State<PaymentElement> {
       ..style.overflowX = 'hidden';
 
     elements = WebStripe.js.elements(createOptions());
+
     mutationObserver!.observe(
       web.document,
       web.MutationObserverInit(childList: true, subtree: true),
     );
+
     ui.platformViewRegistry.registerViewFactory(
       'stripe_payment_element',
       (int viewId) => _divElement,
     );
-
-    super.initState();
   }
+
+  // @override
+  // void initState() {
+  //   // height = widget.height ?? height;
+
+  //   _divElement = web.HTMLDivElement()
+  //     ..id = 'payment-element'
+  //     ..style.border = 'none'
+  //     ..style.width = '100%'
+  //     ..style.height = '400px'
+  //     ..style.overflow = 'scroll'
+  //     ..style.overflowX = 'hidden';
+
+  //   elements = WebStripe.js.elements(createOptions());
+  //   mutationObserver!.observe(
+  //     web.document,
+  //     web.MutationObserverInit(childList: true, subtree: true),
+  //   );
+  //   ui.platformViewRegistry.registerViewFactory(
+  //     'stripe_payment_element',
+  //     (int viewId) => _divElement,
+  //   );
+
+  //   super.initState();
+  // }
 
   js.PaymentElement? get element => WebStripe.element as js.PaymentElement?;
 
