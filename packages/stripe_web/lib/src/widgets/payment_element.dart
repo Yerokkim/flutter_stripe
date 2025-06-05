@@ -146,6 +146,7 @@ class PaymentElementState extends State<PaymentElement> {
     _divElement = web.HTMLDivElement()
       ..id = 'payment-element'
       ..style.border = 'none'
+      ..style.position = 'fixed'
       ..style.width = '100%'
       ..style.height = '$height'
       ..style.overflow = 'scroll'
