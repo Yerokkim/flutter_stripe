@@ -115,10 +115,14 @@ class PaymentElementState extends State<PaymentElement> {
             mutationObserver?.disconnect();
             final element = stripeElements.item(0) as web.HTMLElement;
 
-            element.style.position = 'fixed';
-            element.style.bottom = '0px';
+            element.style.position = 'absolute';
+            element.style.top = '0px';
+            element.style.left = '0px';
             element.style.zIndex = '9999';
             element.style.backgroundColor = 'white';
+            element.style.scrollMargin = '0px';
+            element.style.scrollSnapType = 'none';
+
             resizeObserver.observe(element);
           }
         }.toJS);
@@ -169,7 +173,7 @@ class PaymentElementState extends State<PaymentElement> {
       ..style.border = 'none'
       ..style.width = '100%'
       ..style.height = '$height'
-      ..style.overflow = 'scroll'
+      ..style.overflow = 'none'
       ..style.overflowX = 'hidden';
 
     elements = WebStripe.js.elements(createOptions());
