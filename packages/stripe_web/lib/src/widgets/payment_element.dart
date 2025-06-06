@@ -114,6 +114,11 @@ class PaymentElementState extends State<PaymentElement> {
           if (stripeElements.length != 0) {
             mutationObserver?.disconnect();
             final element = stripeElements.item(0) as web.HTMLElement;
+
+            element.style.position = 'fixed';
+            element.style.bottom = '0px';
+            element.style.zIndex = '9999';
+            element.style.backgroundColor = 'white';
             resizeObserver.observe(element);
           }
         }.toJS);
