@@ -114,15 +114,6 @@ class PaymentElementState extends State<PaymentElement> {
           if (stripeElements.length != 0) {
             mutationObserver?.disconnect();
             final element = stripeElements.item(0) as web.HTMLElement;
-
-            element.style.position = 'absolute';
-            element.style.top = '0px';
-            element.style.left = '0px';
-            element.style.zIndex = '9999';
-            element.style.backgroundColor = 'white';
-            element.style.scrollMargin = '0px';
-            element.style.scrollSnapType = 'none';
-
             resizeObserver.observe(element);
           }
         }.toJS);
@@ -133,15 +124,9 @@ class PaymentElementState extends State<PaymentElement> {
       }
     }.toJS),
   );
-  final initialWindowHeight = web.window.innerHeight.toDouble() ?? 0.0;
+
   late final resizeObserver = web.ResizeObserver(
     ((JSArray<web.ResizeObserverEntry> entries, web.ResizeObserver observer) {
-      final currentHeight = web.window.innerHeight.toDouble() ?? 0.0;
-
-      if ((initialWindowHeight - currentHeight) > 150) {
-        return;
-      }
-
       if (widget.height == null) {
         for (final entry in entries.toDart) {
           final cr = entry.contentRect;
@@ -151,16 +136,6 @@ class PaymentElementState extends State<PaymentElement> {
           });
         }
       }
-
-      // if (widget.height == null) {
-      //   for (final entry in entries.toDart) {
-      //     final cr = entry.contentRect;
-      //     setState(() {
-      //       height = cr.height.toDouble();
-      //       _divElement.style.height = '${height}px';
-      //     });
-      //   }
-      // }
     }).toJS,
   );
 
@@ -173,7 +148,7 @@ class PaymentElementState extends State<PaymentElement> {
       ..style.border = 'none'
       ..style.width = '100%'
       ..style.height = '$height'
-      ..style.overflow = 'none'
+      ..style.overflow = 'scroll'
       ..style.overflowX = 'hidden';
 
     elements = WebStripe.js.elements(createOptions());
