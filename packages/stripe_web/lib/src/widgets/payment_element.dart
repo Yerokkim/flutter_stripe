@@ -103,7 +103,7 @@ class PaymentElementState extends State<PaymentElement> {
         mutationObserver?.disconnect();
         element = elements!.createPayment(elementOptions())
           ..mount('#payment-element'.toJS)
-          ..onBlur(requestBlur)
+          // ..onBlur(requestBlur)
           ..onFocus(requestFocus)
           ..onChange(onCardChanged);
         mutationObserver = web.MutationObserver(
@@ -111,11 +111,11 @@ class PaymentElementState extends State<PaymentElement> {
                 web.MutationObserver observer) {
           final stripeElements =
               web.document.getElementsByClassName('__PrivateStripeElement');
-          if (stripeElements.length != 0) {
-            mutationObserver?.disconnect();
-            final element = stripeElements.item(0) as web.HTMLElement;
-            resizeObserver.observe(element);
-          }
+          // if (stripeElements.length != 0) {
+          //   mutationObserver?.disconnect();
+          //   final element = stripeElements.item(0) as web.HTMLElement;
+          //   resizeObserver.observe(element);
+          // }
         }.toJS);
         mutationObserver!.observe(
           web.document,
@@ -131,8 +131,9 @@ class PaymentElementState extends State<PaymentElement> {
         for (final entry in entries.toDart) {
           final cr = entry.contentRect;
           setState(() {
-            height = cr.height.toDouble();
-            _divElement.style.height = '${height}px';
+            //  height = cr.height.toDouble();
+            _divElement.style.height = '400px';
+            // '${height}px';
           });
         }
       }
@@ -141,19 +142,14 @@ class PaymentElementState extends State<PaymentElement> {
 
   @override
   void initState() {
-    super.initState();
-    final body = web.document.body!;
-    body.style.position = 'fixed';
-    body.style.width = '100vw';
-    body.style.height = '100vh';
-    body.style.overflow = 'hidden';
     height = widget.height ?? height;
 
     _divElement = web.HTMLDivElement()
       ..id = 'payment-element'
       ..style.border = 'none'
       ..style.width = '100%'
-      ..style.height = '$height'
+      ..style.height = '400px'
+      //'$height'
       ..style.overflow = 'scroll'
       ..style.overflowX = 'hidden';
 
@@ -166,6 +162,8 @@ class PaymentElementState extends State<PaymentElement> {
       'stripe_payment_element',
       (int viewId) => _divElement,
     );
+
+    super.initState();
   }
 
   js.PaymentElement? get element => WebStripe.element as js.PaymentElement?;
