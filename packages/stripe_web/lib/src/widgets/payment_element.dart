@@ -124,9 +124,15 @@ class PaymentElementState extends State<PaymentElement> {
       }
     }.toJS),
   );
-
+  final initialWindowHeight = web.window.innerHeight.toDouble() ?? 0.0;
   late final resizeObserver = web.ResizeObserver(
     ((JSArray<web.ResizeObserverEntry> entries, web.ResizeObserver observer) {
+      final currentHeight = web.window.innerHeight.toDouble() ?? 0.0;
+
+      if ((initialWindowHeight - currentHeight) > 150) {
+        return;
+      }
+
       if (widget.height == null) {
         for (final entry in entries.toDart) {
           final cr = entry.contentRect;
@@ -136,6 +142,16 @@ class PaymentElementState extends State<PaymentElement> {
           });
         }
       }
+
+      // if (widget.height == null) {
+      //   for (final entry in entries.toDart) {
+      //     final cr = entry.contentRect;
+      //     setState(() {
+      //       height = cr.height.toDouble();
+      //       _divElement.style.height = '${height}px';
+      //     });
+      //   }
+      // }
     }).toJS,
   );
 
