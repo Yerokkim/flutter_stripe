@@ -103,7 +103,7 @@ class PaymentElementState extends State<PaymentElement> {
         mutationObserver?.disconnect();
         element = elements!.createPayment(elementOptions())
           ..mount('#payment-element'.toJS)
-          // ..onBlur(requestBlur)
+          ..onBlur(requestBlur)
           ..onFocus(requestFocus)
           ..onChange(onCardChanged);
         mutationObserver = web.MutationObserver(
@@ -111,11 +111,11 @@ class PaymentElementState extends State<PaymentElement> {
                 web.MutationObserver observer) {
           final stripeElements =
               web.document.getElementsByClassName('__PrivateStripeElement');
-          // if (stripeElements.length != 0) {
-          //   mutationObserver?.disconnect();
-          //   final element = stripeElements.item(0) as web.HTMLElement;
-          //   resizeObserver.observe(element);
-          // }
+          if (stripeElements.length != 0) {
+            mutationObserver?.disconnect();
+            final element = stripeElements.item(0) as web.HTMLElement;
+            resizeObserver.observe(element);
+          }
         }.toJS);
         mutationObserver!.observe(
           web.document,
@@ -131,9 +131,8 @@ class PaymentElementState extends State<PaymentElement> {
         for (final entry in entries.toDart) {
           final cr = entry.contentRect;
           setState(() {
-            //  height = cr.height.toDouble();
-            _divElement.style.height = '400px';
-            // '${height}px';
+            height = cr.height.toDouble();
+            _divElement.style.height = '${height}px';
           });
         }
       }
@@ -148,8 +147,7 @@ class PaymentElementState extends State<PaymentElement> {
       ..id = 'payment-element'
       ..style.border = 'none'
       ..style.width = '100%'
-      ..style.height = '400px'
-      //'$height'
+      ..style.height = '$height'
       ..style.overflow = 'scroll'
       ..style.overflowX = 'hidden';
 
